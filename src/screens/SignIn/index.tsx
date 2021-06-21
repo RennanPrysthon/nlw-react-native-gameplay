@@ -7,11 +7,6 @@ import { styles } from "./style";
 export const SignIn: React.FC = () => {
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
       <Image
         source={IlustrationImage}
         style={styles.image}
