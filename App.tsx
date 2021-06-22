@@ -10,8 +10,8 @@ import {
   Rajdhani_700Bold,
 } from "@expo-google-fonts/rajdhani";
 
-import { SignIn } from "./src/screens/SignIn";
 import { StatusBar } from "react-native";
+import { Routes } from "./src/routes";
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -32,7 +32,7 @@ const App: React.FC = () => {
         backgroundColor="transparent"
         translucent
       />
-      <SignIn />
+      <Routes />
     </Background>
   );
 };

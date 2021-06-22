@@ -1,55 +1,22 @@
-import React, { useRef } from "react";
-import { Animated, Image, Pressable, Text, View } from "react-native";
+import React from "react";
+import { Image, Pressable, Text, View } from "react-native";
+import { RectButton, RectButtonProps } from "react-native-gesture-handler";
 import DiscordImg from "../../assets/discord.png";
 import { styles } from "./style";
 
-type Props = {
+type Props = RectButtonProps & {
   title: string;
 };
 
-const ButtonIcon: React.FC<Props> = ({ title }) => {
-  const size = useRef(new Animated.Value(0)).current;
-
-  const onPressIn = () => {
-    Animated.timing(size, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(() => {});
-  };
-
-  const onPressOut = () => {
-    Animated.timing(size, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  };
-
+const ButtonIcon: React.FC<Props> = ({ title, ...rest }) => {
   return (
-    <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            transform: [
-              {
-                scale: size.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 0.9],
-                }),
-              },
-            ],
-          },
-        ]}
-      >
-        <View style={styles.iconWrapper}>
-          <Image source={DiscordImg} style={styles.icon} />
-        </View>
+    <RectButton style={styles.container} {...rest}>
+      <View style={styles.iconWrapper}>
+        <Image source={DiscordImg} style={styles.icon} />
+      </View>
 
-        <Text style={styles.title}>{title}</Text>
-      </Animated.View>
-    </Pressable>
+      <Text style={styles.title}>{title}</Text>
+    </RectButton>
   );
 };
 
