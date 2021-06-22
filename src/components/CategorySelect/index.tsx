@@ -8,11 +8,13 @@ import Category from "../Category";
 type Props = {
   categorySelected: string;
   setCategory: (categoryId: string) => void;
+  hasCheckBox?: boolean;
 };
 
 export const CategorySelect: React.FC<Props> = ({
   categorySelected,
   setCategory,
+  hasCheckBox = false,
 }) => {
   return (
     <ScrollView
@@ -27,6 +29,7 @@ export const CategorySelect: React.FC<Props> = ({
           {...category}
           checked={category.id === categorySelected}
           onPress={() => setCategory(category.id)}
+          hasCheckBox={hasCheckBox}
         />
       ))}
     </ScrollView>
