@@ -9,6 +9,7 @@ import { ListHeader } from "../../components/ListHeader";
 import { styles } from "./style";
 import { Appointment } from "../../components/Appointment";
 import { ListDivider } from "../../components/ListDivider";
+import Background from "../../components/Background";
 
 export const Home: React.FC = () => {
   const [category, setCategory] = useState("");
@@ -47,29 +48,31 @@ export const Home: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Profile />
-        <ButtonAdd />
-      </View>
+    <Background>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Profile />
+          <ButtonAdd />
+        </View>
 
-      <CategorySelect
-        categorySelected={category}
-        setCategory={handleCategorySelect}
-      />
-
-      <View style={styles.content}>
-        <ListHeader title="Partidas agendadas" subtitle="Total 6" />
-
-        <FlatList
-          data={appoinments}
-          keyExtractor={(data) => data.id}
-          renderItem={({ item }) => <Appointment data={item} />}
-          style={styles.matches}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <ListDivider />}
+        <CategorySelect
+          categorySelected={category}
+          setCategory={handleCategorySelect}
         />
+
+        <View style={styles.content}>
+          <ListHeader title="Partidas agendadas" subtitle="Total 6" />
+
+          <FlatList
+            data={appoinments}
+            keyExtractor={(data) => data.id}
+            renderItem={({ item }) => <Appointment data={item} />}
+            style={styles.matches}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <ListDivider />}
+          />
+        </View>
       </View>
-    </View>
+    </Background>
   );
 };
