@@ -1,6 +1,5 @@
 import { theme } from "./../../global/styles/theme";
 import { StyleSheet } from "react-native";
-import { Inter_800ExtraBold } from "@expo-google-fonts/inter";
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,6 +22,7 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.title700,
     color: theme.colors.heading,
     fontSize: 15,
+    marginTop: 15,
   },
   checkedBox: {
     position: "absolute",

@@ -6,7 +6,7 @@ import { Background } from "../../components/Background";
 import { ListHeader } from "../../components/ListHeader";
 import Member from "../../components/Member";
 import { ListDivider } from "../../components/ListDivider";
-import Header from "../../components/Header";
+import { Header } from "../../components/Header";
 import ButtonIcon from "../../components/ButtonIcon";
 
 import { theme } from "../../global/styles/theme";
