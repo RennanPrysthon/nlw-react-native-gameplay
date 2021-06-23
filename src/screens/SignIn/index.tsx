@@ -5,7 +5,7 @@ import { Image, Text, View } from "react-native";
 import IlustrationImage from "../../assets/illustration.png";
 import ButtonIcon from "../../components/ButtonIcon";
 import { styles } from "./style";
-import Background from "../../components/Background";
+import { Background } from "../../components/Background";
 
 export const SignIn: React.FC = () => {
   const navigation = useNavigation();

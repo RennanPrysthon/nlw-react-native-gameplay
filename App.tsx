@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
 import { Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/inter";
-import Background from "./src/components/Background";
+import { Background } from "./src/components/Background";
 
 import {
   Rajdhani_500Medium,
