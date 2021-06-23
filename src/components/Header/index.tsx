@@ -13,7 +13,7 @@ type Props = {
   action?: ReactNode;
 };
 
-const Header: React.FC<Props> = ({ title, action }) => {
+export const Header: React.FC<Props> = ({ title, action }) => {
   const { secondary100, secondary40, heading } = theme.colors;
   const navigator = useNavigation();
 
@@ -36,5 +36,3 @@ const Header: React.FC<Props> = ({ title, action }) => {
     </LinearGradient>
   );
 };
-
-export default Header;

@@ -14,11 +14,12 @@ type Props = RectButtonProps & {
   checked?: boolean;
 };
 
-const Category: React.FC<Props> = ({
+export const Category: React.FC<Props> = ({
   title,
   icon: Icon,
   checked = false,
   hasCheckBox = false,
+  id,
   ...rest
 }) => {
   const { secondary40, secondary50, secondary70, secondary85 } = theme.colors;
@@ -47,5 +48,3 @@ const Category: React.FC<Props> = ({
     </RectButton>
   );
 };
-
-export default Category;

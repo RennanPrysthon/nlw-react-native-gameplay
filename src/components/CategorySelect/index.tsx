@@ -3,7 +3,7 @@ import { ScrollView } from "react-native";
 
 import { styles } from "./style";
 import { categories } from "../../utils/categories";
-import Category from "../Category";
+import { Category } from "../Category";
 
 type Props = {
   categorySelected: string;
