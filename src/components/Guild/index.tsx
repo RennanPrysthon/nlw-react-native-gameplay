@@ -11,6 +11,7 @@ import { theme } from "../../global/styles/theme";
 import { GuildIcon } from "../GuildIcon";
 
 import { styles } from "./style";
+
 export type GuildProps = {
   id: string;
   name: string;
