@@ -12,10 +12,12 @@ import {
 
 import { StatusBar } from "react-native";
 import { Routes } from "./src/routes";
+import AuthProvider from "./src/hooks/auth";
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
+
     Inter_500Medium,
     Rajdhani_500Medium,
     Rajdhani_700Bold,
@@ -32,7 +34,9 @@ const App: React.FC = () => {
         backgroundColor="transparent"
         translucent
       />
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </Background>
   );
 };
