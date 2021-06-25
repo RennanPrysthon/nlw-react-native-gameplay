@@ -1,35 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BorderlessButton } from "react-native-gesture-handler";
+import { useRoute } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
 
 import { Background } from "../../components/Background";
 import { ListHeader } from "../../components/ListHeader";
-import Member from "../../components/Member";
+import Member, { MemberProps } from "../../components/Member";
 import { ListDivider } from "../../components/ListDivider";
 import { Header } from "../../components/Header";
 import ButtonIcon from "../../components/ButtonIcon";
 
 import { theme } from "../../global/styles/theme";
-import { ImageBackground, Text, View, FlatList } from "react-native";
+import { ImageBackground, Text, View, FlatList, Alert } from "react-native";
 
 import Banner from "../../assets/banner.png";
 import { styles } from "./style";
+import { AppointmentProps } from "../../components/Appointment";
+import { api } from "../../services/api";
+import { Loading } from "../../components/Loading";
+
+type RouteParams = {
+  guildSelected: AppointmentProps;
+};
+
+type GuildWidget = {
+  id: string;
+  name: string;
+  instant_invite: string;
+  members: MemberProps[];
+};
 
 export const AppointmentDetails: React.FC = () => {
-  const member = [
-    {
-      id: "1",
-      username: "Rennan",
-      avatar_url: "http://github.com/RennanPrysthon.png",
-      status: "online",
-    },
-    {
-      id: "2",
-      username: "Teste",
-      avatar_url: "http://github.com/RennanPrysthon.png",
-      status: "offline",
-    },
-  ];
+  const [widget, setWidget] = useState<GuildWidget>({} as GuildWidget);
+  const [loading, setLoading] = useState(true);
+
+  const route = useRoute();
+  const { guildSelected } = route.params as RouteParams;
+
+  async function fetchGuildWidget() {
+    try {
+      const response = await api.get(
+        `/guilds/${guildSelected.guild.id}/widget.json`
+      );
+
+      setWidget(response.data);
+    } catch {
+      Alert.alert(
+        "Verifique as configurações do servidor. O widget está habilitado?"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchGuildWidget();
+  }, []);
+
   return (
     <Background>
       <Header
@@ -43,22 +70,29 @@ export const AppointmentDetails: React.FC = () => {
 
       <ImageBackground source={Banner} style={styles.banner}>
         <View style={styles.bannerContent}>
-          <Text style={styles.title}>Lendários</Text>
-          <Text style={styles.subtitle}>
-            É hoje que vamos chegar ao challenger sem perder uma partida da md10
-          </Text>
+          <Text style={styles.title}>{guildSelected.guild.name}</Text>
+          <Text style={styles.subtitle}>{guildSelected.description}</Text>
         </View>
       </ImageBackground>
 
-      <ListHeader title="Jogadores" subtitle="Total 3" />
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <ListHeader
+            title="Jogadores"
+            subtitle={`Total ${widget.members.length}`}
+          />
 
-      <FlatList
-        data={member}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Member data={item} />}
-        ItemSeparatorComponent={() => <ListDivider isCentered />}
-        style={styles.member}
-      />
+          <FlatList
+            data={widget.members}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <Member data={item} />}
+            ItemSeparatorComponent={() => <ListDivider isCentered />}
+            style={styles.member}
+          />
+        </>
+      )}
       <View style={styles.footer}>
         <ButtonIcon title="Entrar na partida" />
       </View>

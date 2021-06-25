@@ -27,8 +27,10 @@ export const Home: React.FC = () => {
     categoryId === category ? setCategory("") : setCategory(categoryId);
   }
 
-  function handleAppointmentDetails() {
-    navigation.navigate("AppointmentDetails");
+  function handleAppointmentDetails(guildSelected: AppointmentProps) {
+    navigation.navigate("AppointmentDetails", {
+      guildSelected,
+    });
   }
 
   function handleAppointmentCreate() {
@@ -82,7 +84,10 @@ export const Home: React.FC = () => {
               data={appoinments}
               keyExtractor={(data) => data.id}
               renderItem={({ item }) => (
-                <Appointment data={item} onPress={handleAppointmentDetails} />
+                <Appointment
+                  data={item}
+                  onPress={() => handleAppointmentDetails(item)}
+                />
               )}
               style={styles.matches}
               showsVerticalScrollIndicator={false}
