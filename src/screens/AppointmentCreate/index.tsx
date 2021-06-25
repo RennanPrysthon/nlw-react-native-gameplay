@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Animated,
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
@@ -29,18 +30,24 @@ import { Background } from "../../components/Background";
 import { TextArea } from "../../components/TextArea";
 import { Button } from "../../components/Button";
 import { GuildProps } from "../../components/Guild";
+import { useEffect } from "react";
+import { useRef } from "react";
 
 export const AppointmentCreate: React.FC = () => {
   const navigation = useNavigation();
-  const [category, setCategory] = useState("");
   const [visible, setVisible] = useState(false);
-  const [guild, setGuild] = useState<GuildProps>({} as GuildProps);
 
+  const [category, setCategory] = useState("");
+  const [guild, setGuild] = useState<GuildProps>({} as GuildProps);
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [hour, setHour] = useState("");
   const [minute, setMinute] = useState("");
   const [description, setDescription] = useState("");
+
+  const opacity = useRef(new Animated.Value(0.6)).current;
+
+  const [isValid, setIsValid] = useState(false);
 
   function handleOpenModal() {
     setVisible(true);
@@ -59,6 +66,8 @@ export const AppointmentCreate: React.FC = () => {
   }
 
   async function handleSave() {
+    if (!isValid) return;
+
     const newAppointment = {
       id: uuid.v4(),
       guild,
@@ -76,6 +85,23 @@ export const AppointmentCreate: React.FC = () => {
 
     navigation.navigate("Home");
   }
+
+  useEffect(() => {
+    let valid =
+      !!category &&
+      !!guild &&
+      !!day &&
+      !!month &&
+      !!hour &&
+      !!minute &&
+      !!description;
+    setIsValid(valid);
+    Animated.timing(opacity, {
+      toValue: valid ? 1 : 0.6,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [category, guild, day, month, hour, minute, description]);
 
   return (
     <KeyboardAvoidingView
@@ -161,9 +187,9 @@ export const AppointmentCreate: React.FC = () => {
               onChangeText={setDescription}
             />
 
-            <View style={styles.footer}>
+            <Animated.View style={[styles.footer, { opacity }]}>
               <Button title="Agendar" onPress={handleSave} />
-            </View>
+            </Animated.View>
           </View>
         </ScrollView>
       </Background>
