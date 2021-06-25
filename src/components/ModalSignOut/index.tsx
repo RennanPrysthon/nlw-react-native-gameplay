@@ -31,14 +31,14 @@ export const ModalSignOut: React.FC<Props> = ({ closeModal, ...rest }) => {
         </Text>
         <View style={styles.footer}>
           <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, styles.buttonSecondary]}
             onPress={closeModal}
             activeOpacity={0.6}
           >
             <Text style={styles.text}>Não</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, styles.buttonPrimary]}
             onPress={signOut}
             activeOpacity={0.6}
           >

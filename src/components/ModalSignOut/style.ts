@@ -1,4 +1,4 @@
-import { theme } from "../../global/styles/theme";
+import { theme } from "./../../global/styles/theme";
 import { StyleSheet, Dimensions } from "react-native";
 const { height: H } = Dimensions.get("screen");
 
@@ -28,12 +28,21 @@ export const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+
     marginLeft: 4,
     marginRight: 4,
     maxHeight: 56,
+  },
+  buttonSecondary: {
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: theme.colors.secondary30,
+  },
+  buttonPrimary: {
+    backgroundColor: theme.colors.primary,
   },
   text: {
     padding: 24,
