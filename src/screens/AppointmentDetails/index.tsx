@@ -56,7 +56,7 @@ export const AppointmentDetails: React.FC = () => {
         data={member}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <Member data={item} />}
-        ItemSeparatorComponent={ListDivider}
+        ItemSeparatorComponent={() => <ListDivider isCentered />}
         style={styles.member}
       />
       <View style={styles.footer}>
