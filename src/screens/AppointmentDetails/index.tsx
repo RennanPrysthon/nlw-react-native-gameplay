@@ -11,6 +11,7 @@ import {
 import { BorderlessButton } from "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
+import * as Linkind from "expo-linking";
 
 import { Background } from "../../components/Background";
 import { ListHeader } from "../../components/ListHeader";
@@ -78,6 +79,11 @@ export const AppointmentDetails: React.FC = () => {
     });
   }
 
+  function handleOpenGuild() {
+    if (!widget.instant_invite) return;
+    Linkind.openURL(widget.instant_invite);
+  }
+
   useEffect(() => {
     fetchGuildWidget();
   }, []);
@@ -118,7 +124,7 @@ export const AppointmentDetails: React.FC = () => {
         </>
       )}
       <View style={styles.footer}>
-        <ButtonIcon title="Entrar na partida" />
+        <ButtonIcon title="Entrar na partida" onPress={handleOpenGuild} />
       </View>
     </Background>
   );
