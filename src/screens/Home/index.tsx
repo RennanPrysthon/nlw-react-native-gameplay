@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,6 +15,7 @@ import { Appointment, AppointmentProps } from "../../components/Appointment";
 import { ListDivider } from "../../components/ListDivider";
 import { Background } from "../../components/Background";
 import { Loading } from "../../components/Loading";
+import { ModalSignOut } from "../../components/ModalSignOut";
 
 export const Home: React.FC = () => {
   const navigation = useNavigation();
@@ -22,6 +23,8 @@ export const Home: React.FC = () => {
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(true);
   const [appoinments, setAppoinments] = useState<AppointmentProps[]>([]);
+
+  const [signOutOpen, setSignOutOpen] = useState(false);
 
   function handleCategorySelect(categoryId: string) {
     categoryId === category ? setCategory("") : setCategory(categoryId);
@@ -54,6 +57,10 @@ export const Home: React.FC = () => {
     setLoading(false);
   }
 
+  function handleSignOut() {
+    setSignOutOpen(true);
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchAppointments();
@@ -61,42 +68,49 @@ export const Home: React.FC = () => {
   );
 
   return (
-    <Background>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Profile />
-          <ButtonAdd onPress={handleAppointmentCreate} />
-        </View>
+    <>
+      <Background>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Profile handleSignOut={handleSignOut} />
+            <ButtonAdd onPress={handleAppointmentCreate} />
+          </View>
 
-        <CategorySelect
-          categorySelected={category}
-          setCategory={handleCategorySelect}
-        />
-        {loading ? (
-          <Loading />
-        ) : (
-          <>
-            <ListHeader
-              title="Partidas agendadas"
-              subtitle={`Total ${appoinments.length}`}
-            />
-            <FlatList
-              data={appoinments}
-              keyExtractor={(data) => data.id}
-              renderItem={({ item }) => (
-                <Appointment
-                  data={item}
-                  onPress={() => handleAppointmentDetails(item)}
-                />
-              )}
-              style={styles.matches}
-              showsVerticalScrollIndicator={false}
-              ItemSeparatorComponent={() => <ListDivider />}
-              contentContainerStyle={{ paddingBottom: 69 }}
-            />
-          </>
-        )}
-      </View>
-    </Background>
+          <CategorySelect
+            categorySelected={category}
+            setCategory={handleCategorySelect}
+          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <>
+              <ListHeader
+                title="Partidas agendadas"
+                subtitle={`Total ${appoinments.length}`}
+              />
+              <FlatList
+                data={appoinments}
+                keyExtractor={(data) => data.id}
+                renderItem={({ item }) => (
+                  <Appointment
+                    data={item}
+                    onPress={() => handleAppointmentDetails(item)}
+                  />
+                )}
+                style={styles.matches}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => <ListDivider />}
+                contentContainerStyle={{ paddingBottom: 69 }}
+              />
+            </>
+          )}
+        </View>
+      </Background>
+      <ModalSignOut
+        animationType="fade"
+        closeModal={() => setSignOutOpen(false)}
+        visible={signOutOpen}
+      />
+    </>
   );
 };

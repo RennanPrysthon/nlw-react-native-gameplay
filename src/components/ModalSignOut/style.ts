@@ -1,25 +1,18 @@
-import { StyleSheet, Dimensions } from "react-native";
-import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { theme } from "../../global/styles/theme";
-const { width } = Dimensions.get("screen");
+import { StyleSheet, Dimensions } from "react-native";
+const { height: H } = Dimensions.get("screen");
 
 export const styles = StyleSheet.create({
-  container: {
+  overlay: {
+    backgroundColor: theme.colors.overlay,
     flex: 1,
   },
-  header: {
-    width,
+  container: {
+    height: 170,
     paddingHorizontal: 24,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: getStatusBarHeight() + 26,
-    marginBottom: 42,
+    paddingBottom: 40,
+    alignItems: "center",
   },
-  matches: {
-    marginTop: 24,
-    marginLeft: 24,
-  },
-
   title: {
     fontFamily: theme.fonts.title700,
     color: theme.colors.heading,
