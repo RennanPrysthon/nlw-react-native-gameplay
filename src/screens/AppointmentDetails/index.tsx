@@ -123,9 +123,11 @@ export const AppointmentDetails: React.FC = () => {
           />
         </>
       )}
-      <View style={styles.footer}>
-        <ButtonIcon title="Entrar na partida" onPress={handleOpenGuild} />
-      </View>
+      {guildSelected.guild.owner && (
+        <View style={styles.footer}>
+          <ButtonIcon title="Entrar na partida" onPress={handleOpenGuild} />
+        </View>
+      )}
     </Background>
   );
 };
