@@ -3,7 +3,7 @@ import * as AuthSession from "expo-auth-session";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { api } from "../services/api";
-import { COLLECTION_USERS } from "../config/storage";
+import { COLLECTION_APPOINTMENTTS, COLLECTION_USERS } from "../config/storage";
 
 const { REDIRECT_URI } = process.env;
 const { SCOPE } = process.env;
@@ -23,6 +23,7 @@ type User = {
 type AuthContextData = {
   user: User;
   signIn: () => Promise<void>;
+  signOut: () => Promise<void>;
   loading: boolean;
 };
 
@@ -80,12 +81,18 @@ const AuthProvider: React.FC = ({ children }) => {
     }
   }
 
+  async function signOut() {
+    setUser({} as User);
+    await AsyncStorage.removeItem(COLLECTION_USERS);
+    await AsyncStorage.removeItem(COLLECTION_APPOINTMENTTS);
+  }
+
   useEffect(() => {
     loadUserStorageData();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, signIn, loading }}>
+    <AuthContext.Provider value={{ user, signIn, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   );
