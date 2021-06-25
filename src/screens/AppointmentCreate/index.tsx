@@ -17,7 +17,7 @@ import { GuildIcon } from "../../components/GuildIcon";
 import { SmallInput } from "../../components/SmallInput";
 import { Background } from "../../components/Background";
 import { TextArea } from "../../components/TextArea";
-
+import DiscordSvg from "../../assets/discord.svg";
 import { styles } from "./style";
 import { theme } from "../../global/styles/theme";
 import { Button } from "../../components/Button";
@@ -70,7 +70,13 @@ export const AppointmentCreate: React.FC = () => {
           <View style={styles.form}>
             <RectButton onPress={handleOpenModal}>
               <View style={styles.select}>
-                {guild.icon ? <GuildIcon /> : <View style={styles.image} />}
+                {guild.icon ? (
+                  <GuildIcon guildId={guild.id} iconId={guild.icon} />
+                ) : (
+                  <View style={styles.image}>
+                    <DiscordSvg width={40} height={40} />
+                  </View>
+                )}
 
                 <View style={styles.selectBody}>
                   <Text style={styles.label}>
