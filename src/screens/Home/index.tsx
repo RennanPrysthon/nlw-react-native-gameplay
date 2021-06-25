@@ -1,48 +1,27 @@
-import React, { useState } from "react";
-import { View, FlatList, Text } from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, FlatList } from "react-native";
+
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { COLLECTION_APPOINTMENTTS } from "../../config/storage";
+import { styles } from "./style";
 
 import { ButtonAdd } from "../../components/ButtonAdd";
 import { CategorySelect } from "../../components/CategorySelect";
 import { Profile } from "../../components/Profile";
 import { ListHeader } from "../../components/ListHeader";
-
-import { styles } from "./style";
-import { Appointment } from "../../components/Appointment";
+import { Appointment, AppointmentProps } from "../../components/Appointment";
 import { ListDivider } from "../../components/ListDivider";
 import { Background } from "../../components/Background";
-import { useNavigation } from "@react-navigation/native";
+import { Loading } from "../../components/Loading";
 
 export const Home: React.FC = () => {
-  const [category, setCategory] = useState("");
   const navigation = useNavigation();
-  const appoinments = [
-    {
-      id: "1",
-      guild: {
-        id: "1",
-        name: "Lendários",
-        icon: null,
-        owner: true,
-      },
-      category: "1",
-      date: "22/06 ás 20:40h",
-      description:
-        "É hoje que vamos chegar ao challenger sem perder uma partida da md10",
-    },
-    {
-      id: "2",
-      guild: {
-        id: "2",
-        name: "Lendários",
-        icon: null,
-        owner: true,
-      },
-      category: "2",
-      date: "22/06 ás 20:40h",
-      description:
-        "É hoje que vamos chegar ao challenger sem perder uma partida da md10",
-    },
-  ];
+
+  const [category, setCategory] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [appoinments, setAppoinments] = useState<AppointmentProps[]>([]);
 
   function handleCategorySelect(categoryId: string) {
     categoryId === category ? setCategory("") : setCategory(categoryId);
@@ -56,6 +35,29 @@ export const Home: React.FC = () => {
     navigation.navigate("AppointmentCreate");
   }
 
+  async function fetchAppointments() {
+    const storage = await AsyncStorage.getItem(COLLECTION_APPOINTMENTTS);
+    const storageResponse: AppointmentProps[] = storage
+      ? JSON.parse(storage)
+      : [];
+
+    if (category) {
+      setAppoinments(
+        storageResponse.filter((item) => item.category === category)
+      );
+    } else {
+      setAppoinments(storageResponse);
+    }
+
+    setLoading(false);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAppointments();
+    }, [category])
+  );
+
   return (
     <Background>
       <View style={styles.container}>
@@ -68,19 +70,24 @@ export const Home: React.FC = () => {
           categorySelected={category}
           setCategory={handleCategorySelect}
         />
-
-        <ListHeader title="Partidas agendadas" subtitle="Total 6" />
-        <FlatList
-          data={appoinments}
-          keyExtractor={(data) => data.id}
-          renderItem={({ item }) => (
-            <Appointment data={item} onPress={handleAppointmentDetails} />
-          )}
-          style={styles.matches}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <ListDivider />}
-          contentContainerStyle={{ paddingBottom: 69 }}
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <ListHeader title="Partidas agendadas" subtitle="Total 6" />
+            <FlatList
+              data={appoinments}
+              keyExtractor={(data) => data.id}
+              renderItem={({ item }) => (
+                <Appointment data={item} onPress={handleAppointmentDetails} />
+              )}
+              style={styles.matches}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={() => <ListDivider />}
+              contentContainerStyle={{ paddingBottom: 69 }}
+            />
+          </>
+        )}
       </View>
     </Background>
   );
