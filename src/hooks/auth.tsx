@@ -55,11 +55,10 @@ const AuthProvider: React.FC = ({ children }) => {
           token: params.access_token,
         });
       }
-
-      setLoading(false);
     } catch {
-      console.log("deu merda");
       throw new Error("Não foi possivel autenticar");
+    } finally {
+      setLoading(false);
     }
   }
 
