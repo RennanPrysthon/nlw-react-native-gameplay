@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from "react";
+import {
+  ImageBackground,
+  Text,
+  View,
+  FlatList,
+  Alert,
+  Share,
+  Platform,
+} from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
@@ -11,7 +20,6 @@ import { Header } from "../../components/Header";
 import ButtonIcon from "../../components/ButtonIcon";
 
 import { theme } from "../../global/styles/theme";
-import { ImageBackground, Text, View, FlatList, Alert } from "react-native";
 
 import Banner from "../../assets/banner.png";
 import { styles } from "./style";
@@ -32,6 +40,8 @@ type GuildWidget = {
 
 export const AppointmentDetails: React.FC = () => {
   const [widget, setWidget] = useState<GuildWidget>({} as GuildWidget);
+  const [membersCount, setMembersCount] = useState(0);
+
   const [loading, setLoading] = useState(true);
 
   const route = useRoute();
@@ -44,6 +54,7 @@ export const AppointmentDetails: React.FC = () => {
       );
 
       setWidget(response.data);
+      setMembersCount(response.data.members.length || 0);
     } catch {
       Alert.alert(
         "Verifique as configurações do servidor. O widget está habilitado?"
@@ -51,6 +62,20 @@ export const AppointmentDetails: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleShareInvitation() {
+    if (!widget.instant_invite) return;
+
+    const message =
+      Platform.OS === "ios"
+        ? `Junte-se a ${guildSelected.guild.name}`
+        : widget.instant_invite;
+
+    Share.share({
+      message,
+      url: widget.instant_invite,
+    });
   }
 
   useEffect(() => {
@@ -62,9 +87,11 @@ export const AppointmentDetails: React.FC = () => {
       <Header
         title="Detalhes"
         action={
-          <BorderlessButton>
-            <Fontisto name="share" size={24} color={theme.colors.primary} />
-          </BorderlessButton>
+          guildSelected.guild.owner && (
+            <BorderlessButton onPress={handleShareInvitation}>
+              <Fontisto name="share" size={24} color={theme.colors.primary} />
+            </BorderlessButton>
+          )
         }
       />
 
@@ -79,10 +106,7 @@ export const AppointmentDetails: React.FC = () => {
         <Loading />
       ) : (
         <>
-          <ListHeader
-            title="Jogadores"
-            subtitle={`Total ${widget.members.length}`}
-          />
+          <ListHeader title="Jogadores" subtitle={`Total ${membersCount}`} />
 
           <FlatList
             data={widget.members}
